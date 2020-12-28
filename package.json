@@ -4,13 +4,13 @@
   "description": "",
   "main": "stupid-dom-logger.js",
   "scripts": {
-    "build": "minify stupid-dom-logger.js > dist/stupid-dom-logger.min.js",
+    "build": "terser stupid-dom-logger.js > dist/stupid-dom-logger.min.js",
     "postbuild": "cp stupid-dom-logger.js ./dist/stupid-dom-logger.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "minify": "^6.0.1"
+    "terser": "^5.5.1"
   }
 }
