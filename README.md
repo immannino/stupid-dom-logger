@@ -8,4 +8,6 @@ A simple proxy module for the built-in `console` api. When a console `log|info|w
 
 Creates a toast for all `console.log`, `console.info`, `console.warn`, `console.debug`, and `console.error` statements.
 
-`<script async src="https://cdn.jsdelivr.net/gh/immannino/stupid-dom-logger/dist/stupid-dom-logger.min.js"></script>`
+```html
+<script async src="https://cdn.jsdelivr.net/gh/immannino/stupid-dom-logger/dist/stupid-dom-logger.min.js"></script>
+```
