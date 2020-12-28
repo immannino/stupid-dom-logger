@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="stupid-dom-logger.js" t></script>
+    <link rel="stylesheet" href="styles.css">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Content and stuff</h1>
+    <p>Here is a page with some shit</p>
+
+    <script>
+        setTimeout(() => {
+            console.log('I am a log');
+        }, 500);
+        
+        setTimeout(() => {
+            console.debug('I am a debug log');
+        }, 1000);
+        
+        setTimeout(() => {
+            console.warn('I am a warn log');
+        }, 1500);
+        
+        setTimeout(() => {
+            console.error('I am an error log');
+        }, 2000);
+
+        setTimeout(() => {
+            console.info('I am a info log');
+            console.info([1,2,3,4,5]);
+            console.info(true);
+            console.info({ a: 1, b: 2, c: false, d: [1,2,3] });
+        }, 2500);
+
+        setTimeout(() => {
+            console.info('I am a log with a lot of shit and stuff. So like here is the stuff and things and other stuff. But yeah like wicked shit man.');
+        }, 3000);
+    </script>
+</body>
+</html>
