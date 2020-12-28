@@ -5,23 +5,37 @@ let toasts = {};
 let toastParent;
 let styles;
 
+/**
+ * Wrapper proxy for console events.
+ * 
+ * With each log call, create a toast
+ */
 function proxy(context, method) {
     return function () {
-        toast(method.name, arguments);
+        // If the parent has been initialized
+        if (toastParent) {
+            toast(method.name, arguments);
+        }
+
         method.apply(context, arguments)
     }
 }
 
+// Proxy the log methods
 console.log = proxy(console, console.log);
 console.info = proxy(console, console.info);
 console.debug = proxy(console, console.debug);
 console.warn = proxy(console, console.warn);
 console.error = proxy(console, console.error);
 
+/**
+ * Creates a toast for each log.
+ */
 function toast(level, message) {
     let temp = document.createElement('div');
     let closeButton = document.createElement('button');
 
+    // Handles deleting the toast
     closeButton.addEventListener('click', (ev) => {
         const id = Number(ev.target.parentElement.id);
         const ele = toasts[id];
@@ -93,7 +107,10 @@ function stringify (anything) {
 }
 
 window.onload = () => {
+    // Create toast parent element
     toastParent = document.createElement('div');
+
+    // Create plugin styles
     styles = document.createElement('style');
     styles.type = 'text/css';
     styles.innerHTML = `
@@ -138,7 +155,8 @@ window.onload = () => {
         }
     `;
     toastParent.id = 'toast-parent';
-
+    
+    // Append elements to DOM
     document.head.appendChild(styles);
     document.body.appendChild(toastParent);
 }
