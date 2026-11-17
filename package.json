@@ -1,16 +1,34 @@
 {
-  "name": "oss-loasttog",
-  "version": "1.0.0",
-  "description": "",
-  "main": "stupid-dom-logger.js",
+  "name": "stupid-dom-logger",
+  "version": "2.0.0",
+  "description": "console.log, but on the page. Drop-in toasts for console.* with an object inspector and pretty stack traces.",
+  "main": "dist/stupid-dom-logger.js",
+  "unpkg": "dist/stupid-dom-logger.min.js",
+  "jsdelivr": "dist/stupid-dom-logger.min.js",
+  "files": [
+    "dist",
+    "stupid-dom-logger.js"
+  ],
   "scripts": {
-    "build": "terser stupid-dom-logger.js > dist/stupid-dom-logger.min.js",
-    "postbuild": "cp stupid-dom-logger.js ./dist/stupid-dom-logger.js"
+    "build": "node scripts/build.mjs",
+    "dev": "python3 -m http.server 5173"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "terser": "^5.5.1"
+  "keywords": [
+    "console",
+    "logger",
+    "toast",
+    "debug",
+    "stack-trace",
+    "mobile-debugging",
+    "devtools"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/immannino/stupid-dom-logger.git"
+  },
+  "author": "Tones",
+  "license": "MIT",
+  "devDependencies": {
+    "terser": "^5.36.0"
   }
 }

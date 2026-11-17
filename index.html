@@ -1,43 +1,181 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="stupid-dom-logger.js"></script>
-    <link rel="stylesheet" href="styles.css">
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>stupid-dom-logger</title>
+  <meta name="description" content="console.log, but on the page. Drop-in toasts for console.* with an object inspector and pretty stack traces.">
+  <!-- The whole install: one script tag. Put it first so it catches everything. -->
+  <script src="stupid-dom-logger.js" data-position="bottom-right"></script>
+  <link rel="stylesheet" href="demo/demo.css">
 </head>
 <body>
-    <h1>Content and stuff</h1>
-    <p>Here is a page with some shit</p>
+  <header class="hero">
+    <div class="wrap">
+      <p class="eyebrow">stupid-dom-logger <span class="pill">v2</span></p>
+      <h1><code>console.log</code>, but on the page.</h1>
+      <p class="lede">One script tag turns every <code>console.*</code> call into an on-screen toast. You get an object inspector, readable stack traces with source previews, and uncaught errors, without opening DevTools. Handy on phones, kiosks, embedded webviews, and screen shares.</p>
+      <div class="install">
+        <pre><code id="install-snippet">&lt;script src="https://cdn.jsdelivr.net/gh/immannino/stupid-dom-logger/dist/stupid-dom-logger.min.js"&gt;&lt;/script&gt;</code></pre>
+        <button class="btn ghost small" data-copy="#install-snippet">Copy</button>
+      </div>
+      <div class="hero-actions">
+        <button class="btn primary" data-demo="tour">▶ Run the tour</button>
+        <a class="btn ghost" href="https://github.com/immannino/stupid-dom-logger">GitHub</a>
+      </div>
+    </div>
+  </header>
 
-    <script>
-        setTimeout(() => {
-            console.log('I am a log');
-        }, 500);
-        
-        setTimeout(() => {
-            console.debug('I am a debug log');
-        }, 1000);
-        
-        setTimeout(() => {
-            console.warn('I am a warn log');
-        }, 1500);
-        
-        setTimeout(() => {
-            console.error('I am an error log');
-        }, 2000);
+  <main class="wrap layout">
+    <section class="playground" aria-label="Playground">
 
-        setTimeout(() => {
-            console.info('I am a info log');
-            console.info([1,2,3,4,5]);
-            console.info(true);
-            console.info({ a: 1, b: 2, c: false, d: [1,2,3] });
-        }, 2500);
+      <article class="card">
+        <header><h2>Log levels</h2><p>Every level gets its own colour. Click the file name on a toast to see the full call stack.</p></header>
+        <div class="btns">
+          <button class="btn lv-log" data-demo="log">console.log</button>
+          <button class="btn lv-info" data-demo="info">console.info</button>
+          <button class="btn lv-debug" data-demo="debug">console.debug</button>
+          <button class="btn lv-warn" data-demo="warn">console.warn</button>
+          <button class="btn lv-error" data-demo="error">console.error</button>
+        </div>
+      </article>
 
-        setTimeout(() => {
-            console.info('I am a log with a lot of shit and stuff. So like here is the stuff and things and other stuff. But yeah like wicked shit man.');
-        }, 3000);
-    </script>
+      <article class="card">
+        <header><h2>Object inspector</h2><p>Objects expand lazily, like DevTools. Circular references, Maps, Sets, classes, and DOM nodes are handled. Hover a DOM node to highlight it on the page.</p></header>
+        <div class="btns">
+          <button class="btn" data-demo="object">Nested object</button>
+          <button class="btn" data-demo="array">Array(1000)</button>
+          <button class="btn" data-demo="mapset">Map &amp; Set</button>
+          <button class="btn" data-demo="instance">Class instance</button>
+          <button class="btn" data-demo="circular">Circular ref</button>
+          <button class="btn" data-demo="dom" id="dom-target">DOM element</button>
+          <button class="btn" data-demo="primitives">Everything else</button>
+        </div>
+      </article>
+
+      <article class="card">
+        <header><h2>Errors &amp; stack traces</h2><p>Stacks are parsed for Chrome, Firefox, and Safari. Vendor frames are dimmed, and the line that threw is fetched and shown with a caret.</p></header>
+        <div class="btns">
+          <button class="btn lv-error" data-demo="caught">Caught TypeError</button>
+          <button class="btn lv-error" data-demo="uncaught">Uncaught error</button>
+          <button class="btn lv-error" data-demo="rejection">Unhandled rejection</button>
+          <button class="btn lv-error" data-demo="cause">Error with cause</button>
+          <button class="btn lv-debug" data-demo="trace">console.trace</button>
+          <button class="btn lv-error" data-demo="assert">console.assert</button>
+          <button class="btn lv-error" data-demo="image">Broken &lt;img&gt;</button>
+        </div>
+      </article>
+
+      <article class="card">
+        <header><h2>The rest of the console</h2><p>Format specifiers, <code>%c</code> styling, tables, counters, and timers all work.</p></header>
+        <div class="btns">
+          <button class="btn" data-demo="styled">%c styling</button>
+          <button class="btn" data-demo="format">%s %d %o</button>
+          <button class="btn" data-demo="table">console.table</button>
+          <button class="btn" data-demo="count">console.count</button>
+          <button class="btn" data-demo="time">console.time</button>
+          <button class="btn" data-demo="dir">console.dir</button>
+        </div>
+      </article>
+
+      <article class="card">
+        <header><h2>Noise control</h2><p>Repeated messages collapse into one toast with a ×N counter. Hover the stack to pause timers. Interact with a toast to pin it.</p></header>
+        <div class="btns">
+          <button class="btn" data-demo="spam">Same log ×50</button>
+          <button class="btn" data-demo="burst">20 different logs</button>
+          <button class="btn" data-demo="manual">StupidDomLogger.toast()</button>
+        </div>
+      </article>
+
+      <article class="card api">
+        <header><h2>API</h2><p>Zero config works fine, but everything can be changed.</p></header>
+<pre><code><span class="c">// Before the script loads…</span>
+window.StupidDomLoggerConfig = { position: 'top-right', levels: ['warn', 'error'] };
+
+<span class="c">// …or on the script tag…</span>
+&lt;script src="stupid-dom-logger.min.js" data-position="top-left" data-duration="3000"&gt;&lt;/script&gt;
+
+<span class="c">// …or at runtime.</span>
+StupidDomLogger.configure({ theme: 'dark', maxToasts: 3 });
+StupidDomLogger.toast('info', 'Shown without touching the console', { ok: true });
+StupidDomLogger.clear();
+StupidDomLogger.disable();   <span class="c">// .enable()</span>
+StupidDomLogger.uninstall(); <span class="c">// restores the original console</span>
+StupidDomLogger.history;     <span class="c">// every message seen, newest last</span></code></pre>
+      </article>
+    </section>
+
+    <aside class="settings" aria-label="Settings">
+      <div class="panel">
+        <h2>Settings</h2>
+
+        <div class="field">
+          <span class="label">Position</span>
+          <div class="screen" role="radiogroup" aria-label="Position">
+            <button role="radio" data-pos="top-left" aria-label="Top left"></button>
+            <button role="radio" data-pos="top-center" aria-label="Top center"></button>
+            <button role="radio" data-pos="top-right" aria-label="Top right"></button>
+            <button role="radio" data-pos="bottom-left" aria-label="Bottom left"></button>
+            <button role="radio" data-pos="bottom-center" aria-label="Bottom center"></button>
+            <button role="radio" data-pos="bottom-right" aria-label="Bottom right"></button>
+          </div>
+        </div>
+
+        <div class="field">
+          <span class="label">Theme</span>
+          <div class="seg" role="radiogroup" aria-label="Theme">
+            <button role="radio" data-theme-opt="auto">Auto</button>
+            <button role="radio" data-theme-opt="light">Light</button>
+            <button role="radio" data-theme-opt="dark">Dark</button>
+          </div>
+        </div>
+
+        <label class="field">
+          <span class="label">Auto-dismiss <output id="duration-out"></output></span>
+          <input type="range" id="duration" min="0" max="15000" step="500">
+        </label>
+
+        <label class="field">
+          <span class="label">Max toasts <output id="max-out"></output></span>
+          <input type="range" id="max" min="1" max="10" step="1">
+        </label>
+
+        <div class="field">
+          <span class="label">Levels</span>
+          <div class="chips">
+            <label class="chip lv-log"><input type="checkbox" data-level="log"> log</label>
+            <label class="chip lv-info"><input type="checkbox" data-level="info"> info</label>
+            <label class="chip lv-debug"><input type="checkbox" data-level="debug"> debug</label>
+            <label class="chip lv-warn"><input type="checkbox" data-level="warn"> warn</label>
+            <label class="chip lv-error"><input type="checkbox" data-level="error"> error</label>
+          </div>
+        </div>
+
+        <div class="field toggles">
+          <label class="toggle"><input type="checkbox" data-opt="callsite"><span></span> Call sites</label>
+          <label class="toggle"><input type="checkbox" data-opt="sourcePreview"><span></span> Source previews</label>
+          <label class="toggle"><input type="checkbox" data-opt="collapse"><span></span> Collapse duplicates</label>
+          <label class="toggle"><input type="checkbox" data-opt="captureErrors"><span></span> Catch uncaught errors</label>
+          <label class="toggle"><input type="checkbox" data-opt="enabled"><span></span> Enabled</label>
+        </div>
+
+        <div class="field">
+          <span class="label">Your script tag</span>
+          <pre class="snippet"><code id="config-snippet"></code></pre>
+          <div class="row">
+            <button class="btn ghost small" data-copy="#config-snippet">Copy</button>
+            <button class="btn ghost small" id="reset">Reset</button>
+            <button class="btn ghost small" data-demo="clear">Clear toasts</button>
+          </div>
+        </div>
+      </div>
+    </aside>
+  </main>
+
+  <footer class="wrap foot">
+    <p>MIT · No dependencies · ~13 kB gzipped · Shadow DOM, so it won't touch your styles.</p>
+  </footer>
+
+  <script src="demo/demo.js"></script>
 </body>
 </html>
